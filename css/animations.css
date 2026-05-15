@@ -1,0 +1,84 @@
+@keyframes breathing {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes floating {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(-4px);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(4px);
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: var(--opacity-dim);
+  }
+
+  50% {
+    opacity: 0.1;
+  }
+}
+
+@keyframes glow-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: var(--opacity-glow);
+  }
+}
+
+@keyframes toast-lifecycle {
+  0% {
+    opacity: 0;
+  }
+
+  12.5% {
+    opacity: 1;
+  }
+
+  87.5% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+@keyframes subtitle-fadein {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: var(--opacity-normal);
+    transform: translateY(0);
+  }
+}

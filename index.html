@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万千心途 · UI 状态</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai&family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="game-container" class="game-stage" data-current-screen="1" aria-label="万千心途 UI 预览">
+    <div class="scene-background" aria-hidden="true"></div>
+    <div class="gradient-overlay" aria-hidden="true"></div>
+
+    <button class="ui-icon global-back" type="button" aria-label="返回">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="34,10 18,28 34,46"/>
+      </svg>
+    </button>
+
+    <button class="ui-icon global-forward" type="button" aria-label="快进">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="28" cy="28" r="20"/>
+        <polyline points="20,20 28,28 20,36"/>
+        <polyline points="29,20 37,28 29,36"/>
+      </svg>
+    </button>
+
+    <section class="screen screen-story is-active" data-screen="1" aria-label="剧情对话界面">
+      <div class="memory-toast story-toast" data-toast role="status" aria-live="polite">
+        <svg class="memory-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4B886" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2 L20 12 L12 22 L4 12 Z"/>
+        </svg>
+        <span>收集记忆碎片：指尖温度</span>
+      </div>
+
+      <button class="interaction-indicator story-overlay" data-overlay="interaction" type="button" aria-label="互动点击" hidden>
+        <span class="interaction-ring" aria-hidden="true">
+          <img src="Assets/icon_hand.svg" width="56" height="56" style="opacity: 0.7; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));" alt="tap">
+        </span>
+      </button>
+
+      <section class="dialogue-area story-dialogue" data-story-dialogue aria-label="当前对话">
+        <article class="dialogue-group dialogue-ai story-ai" data-overlay="ai" hidden>
+          <h2 class="character-name">零号</h2>
+          <p class="dialogue-text">检测到您所在区域正在下雨。</p>
+        </article>
+
+        <article class="dialogue-group dialogue-main">
+          <h2 class="character-name">沈言</h2>
+          <p class="dialogue-text">
+            <span>……谢谢。</span>
+            <span class="auto-indicator" aria-hidden="true">▶</span>
+          </p>
+        </article>
+      </section>
+
+      <p class="monologue story-overlay" data-overlay="monologue" hidden>他的脚步顿了0.5秒——他比我想的更在意我。</p>
+    </section>
+
+    <section class="screen screen-choice" data-screen="2" aria-label="选项选择界面">
+      <section class="dialogue-area" aria-label="当前对话">
+        <article class="dialogue-group dialogue-main">
+          <h2 class="character-name">沈言</h2>
+          <p class="dialogue-text">
+            <span>雨声这么大，你还要走吗？</span>
+            <span class="auto-indicator" aria-hidden="true">▶</span>
+          </p>
+        </article>
+      </section>
+
+      <div class="choice-list">
+        <button class="choice-item" type="button">
+          <span class="choice-letter">A.</span>
+          <span class="choice-text">我是选项常态示意</span>
+        </button>
+        <button class="choice-item is-selected" type="button">
+          <span class="choice-letter">B.</span>
+          <span class="choice-text">我是选项选中态示意</span>
+        </button>
+        <button class="choice-item has-condition" type="button">
+          <span class="choice-letter">C.</span>
+          <span class="choice-text">我是选项内容<span class="choice-condition">（需要：好感度 ≥ 3）</span></span>
+        </button>
+        <button class="choice-item is-disabled" type="button" disabled>
+          <span class="choice-letter">D.</span>
+          <span class="choice-text">我是选项灰态示意</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="screen screen-subtitle" data-screen="3" aria-label="过场字幕">
+      <div class="subtitle-lines">
+        <p class="subtitle-line subtitle-line-first">但如果……</p>
+        <p class="subtitle-line subtitle-line-second">你做了不一样的选择呢？</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/Router.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
