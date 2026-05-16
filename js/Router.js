@@ -4,15 +4,25 @@ class Router {
     this.screens = Array.from(document.querySelectorAll(".screen"));
     this.screenIds = new Set(this.screens.map((screen) => screen.dataset.screen));
     this.currentScreen = "1";
+    this.previousScreen = "1";
     this.currentOverlay = null;
     this.toastTimer = null;
+    this.mapCloseTimer = null;
+    this.mapSelectTimer = null;
+    this.interactionCallback = null;
+    this.mapSelectCallback = null;
 
     this.storyScreen = document.querySelector('.screen[data-screen="1"]');
     this.storyDialogue = document.querySelector("[data-story-dialogue]");
     this.overlayElements = Array.from(document.querySelectorAll("[data-overlay]"));
     this.toast = document.querySelector("[data-toast]");
     this.interaction = document.querySelector('[data-overlay="interaction"]');
+    this.mapScreen = document.querySelector('.screen[data-screen="4"]');
+    this.mapClose = document.querySelector("[data-map-close]");
+    this.mapParticles = document.querySelector("[data-map-particles]");
+    this.mapAvatarNodes = [];
 
+    this.createParticles(this.mapParticles);
     this.bindEvents();
     this.updateScale();
     this.render();
@@ -53,6 +63,7 @@ class Router {
     if (this.interaction) {
       this.interaction.addEventListener("click", () => {
         this.interaction.classList.add("is-clicked");
+        this.interactionCallback?.();
 
         window.setTimeout(() => {
           this.interaction.hidden = true;
@@ -61,6 +72,41 @@ class Router {
         }, 300);
       });
     }
+
+    this.bindMapAvatars();
+
+    this.mapClose?.addEventListener("click", () => {
+      this.closeMap();
+    });
+  }
+
+  bindMapAvatars() {
+    this.mapAvatarNodes = Array.from(document.querySelectorAll(".map-avatar-node"));
+
+    this.mapAvatarNodes.forEach((node) => {
+      if (node.dataset.bound === "true") {
+        return;
+      }
+
+      node.dataset.bound = "true";
+      node.addEventListener("click", () => this.selectMapAvatar(node));
+      node.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          this.selectMapAvatar(node);
+        }
+      });
+    });
+  }
+
+  selectMapAvatar(node) {
+    this.mapAvatarNodes.forEach((avatar) => avatar.classList.remove("selected"));
+    node.classList.add("selected");
+    window.clearTimeout(this.mapSelectTimer);
+
+    this.mapSelectTimer = window.setTimeout(() => {
+      this.mapSelectCallback?.(node.dataset.characterName || "");
+    }, 300);
   }
 
   updateScale() {
@@ -80,9 +126,34 @@ class Router {
       return;
     }
 
+    if (this.currentScreen !== "4" && screenId === "4") {
+      this.previousScreen = this.currentScreen;
+    }
+
+    if (screenId !== "4") {
+      window.clearTimeout(this.mapCloseTimer);
+      window.clearTimeout(this.mapSelectTimer);
+      this.mapScreen?.classList.remove("is-closing");
+      this.mapAvatarNodes.forEach((avatar) => avatar.classList.remove("selected"));
+    }
+
     this.currentScreen = screenId;
     this.currentOverlay = null;
     this.render();
+  }
+
+  closeMap() {
+    if (this.currentScreen !== "4") {
+      return;
+    }
+
+    this.mapScreen?.classList.add("is-closing");
+    window.clearTimeout(this.mapCloseTimer);
+
+    this.mapCloseTimer = window.setTimeout(() => {
+      const targetScreen = this.screenIds.has(this.previousScreen) ? this.previousScreen : "1";
+      this.setScreen(targetScreen);
+    }, 300);
   }
 
   setOverlay(overlay) {
@@ -134,6 +205,27 @@ class Router {
 
     const hidesDialogue = this.currentOverlay === "monologue" || this.currentOverlay === "interaction";
     this.storyDialogue?.classList.toggle("is-hidden", hidesDialogue);
+  }
+
+  createParticles(container, count = 20) {
+    if (!container || container.children.length > 0) {
+      return;
+    }
+
+    for (let i = 0; i < count; i += 1) {
+      const dot = document.createElement("div");
+      dot.className = "map-particle";
+      dot.style.left = `${10 + Math.random() * 80}%`;
+      dot.style.top = `${10 + Math.random() * 80}%`;
+      dot.style.setProperty("--duration", `${2 + Math.random() * 3}s`);
+      dot.style.setProperty("--delay", `${Math.random() * 3}s`);
+
+      const size = `${2 + Math.random() * 2}px`;
+      dot.style.width = size;
+      dot.style.height = size;
+
+      container.appendChild(dot);
+    }
   }
 }
 

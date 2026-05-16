@@ -43,64 +43,60 @@
         </span>
       </button>
 
-      <section class="dialogue-area story-dialogue" data-story-dialogue aria-label="当前对话">
-        <article class="dialogue-group dialogue-ai story-ai" data-overlay="ai" hidden>
-          <h2 class="character-name">零号</h2>
-          <p class="dialogue-text">检测到您所在区域正在下雨。</p>
-        </article>
+      <section class="dialogue-area story-dialogue" data-story-dialogue aria-label="当前对话"></section>
 
-        <article class="dialogue-group dialogue-main">
-          <h2 class="character-name">沈言</h2>
-          <p class="dialogue-text">
-            <span>……谢谢。</span>
-            <span class="auto-indicator" aria-hidden="true">▶</span>
-          </p>
-        </article>
-      </section>
-
-      <p class="monologue story-overlay" data-overlay="monologue" hidden>他的脚步顿了0.5秒——他比我想的更在意我。</p>
+      <p class="monologue story-overlay" data-overlay="monologue" hidden></p>
     </section>
 
     <section class="screen screen-choice" data-screen="2" aria-label="选项选择界面">
-      <section class="dialogue-area" aria-label="当前对话">
-        <article class="dialogue-group dialogue-main">
-          <h2 class="character-name">沈言</h2>
-          <p class="dialogue-text">
-            <span>雨声这么大，你还要走吗？</span>
-            <span class="auto-indicator" aria-hidden="true">▶</span>
-          </p>
-        </article>
-      </section>
+      <section class="dialogue-area" data-choice-context aria-label="当前对话"></section>
 
-      <div class="choice-list">
-        <button class="choice-item" type="button">
-          <span class="choice-letter">A.</span>
-          <span class="choice-text">我是选项常态示意</span>
-        </button>
-        <button class="choice-item is-selected" type="button">
-          <span class="choice-letter">B.</span>
-          <span class="choice-text">我是选项选中态示意</span>
-        </button>
-        <button class="choice-item has-condition" type="button">
-          <span class="choice-letter">C.</span>
-          <span class="choice-text">我是选项内容<span class="choice-condition">（需要：好感度 ≥ 3）</span></span>
-        </button>
-        <button class="choice-item is-disabled" type="button" disabled>
-          <span class="choice-letter">D.</span>
-          <span class="choice-text">我是选项灰态示意</span>
-        </button>
-      </div>
+      <div class="choice-list" data-choice-list></div>
     </section>
 
     <section class="screen screen-subtitle" data-screen="3" aria-label="过场字幕">
-      <div class="subtitle-lines">
-        <p class="subtitle-line subtitle-line-first">但如果……</p>
-        <p class="subtitle-line subtitle-line-second">你做了不一样的选择呢？</p>
+      <div class="subtitle-lines" data-subtitle-lines></div>
+    </section>
+
+    <section class="screen screen-map" data-screen="4" aria-label="全息地图路线选择">
+      <img class="map-background" src="Assets/map_hologram.png" alt="" aria-hidden="true" onerror="this.hidden = true;">
+      <div class="map-particles" data-map-particles aria-hidden="true"></div>
+
+      <button class="ui-icon map-close" type="button" data-map-close aria-label="关闭地图">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <line x1="14" y1="14" x2="34" y2="34"/>
+          <line x1="34" y1="14" x2="14" y2="34"/>
+        </svg>
+      </button>
+
+      <div class="building-label" style="left: 18%; top: 22%; --label-order: 0;">
+        <span class="building-name">图书馆</span>
       </div>
+      <div class="building-label" style="left: 30%; top: 38%; --label-order: 1;">
+        <span class="building-name">行政楼</span>
+      </div>
+      <div class="building-label" style="left: 48%; top: 35%; --label-order: 2;">
+        <span class="building-name">主教学楼</span>
+      </div>
+      <div class="building-label" style="left: 52%; top: 18%; --label-order: 3;">
+        <span class="building-name">礼堂</span>
+      </div>
+      <div class="building-label" style="left: 68%; top: 20%; --label-order: 4;">
+        <span class="building-name">花园</span>
+      </div>
+      <div class="building-label" style="left: 78%; top: 38%; --label-order: 5;">
+        <span class="building-name">体育馆</span>
+      </div>
+      <div class="building-label" style="right: 20%; top: 72%; --label-order: 6;">
+        <span class="building-name">操场</span>
+      </div>
+
+      <div class="map-avatar-layer" data-map-avatars></div>
     </section>
   </main>
 
   <script src="js/Router.js"></script>
+  <script src="js/GameUI.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

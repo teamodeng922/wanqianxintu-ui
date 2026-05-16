@@ -229,7 +229,12 @@ button {
 
 .game-stage[data-current-screen="3"] .scene-background,
 .game-stage[data-current-screen="3"] .gradient-overlay,
-.game-stage[data-current-screen="3"] .ui-icon {
+.game-stage[data-current-screen="3"] .global-back,
+.game-stage[data-current-screen="3"] .global-forward,
+.game-stage[data-current-screen="4"] .scene-background,
+.game-stage[data-current-screen="4"] .gradient-overlay,
+.game-stage[data-current-screen="4"] .global-back,
+.game-stage[data-current-screen="4"] .global-forward {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -238,9 +243,10 @@ button {
     visibility 0s var(--ease-ui) 300ms;
 }
 
-.game-stage:not([data-current-screen="3"]) .scene-background,
-.game-stage:not([data-current-screen="3"]) .gradient-overlay,
-.game-stage:not([data-current-screen="3"]) .ui-icon {
+.game-stage:not([data-current-screen="3"]):not([data-current-screen="4"]) .scene-background,
+.game-stage:not([data-current-screen="3"]):not([data-current-screen="4"]) .gradient-overlay,
+.game-stage:not([data-current-screen="3"]):not([data-current-screen="4"]) .global-back,
+.game-stage:not([data-current-screen="3"]):not([data-current-screen="4"]) .global-forward {
   visibility: visible;
   transition:
     opacity var(--transition-screen),
@@ -571,10 +577,243 @@ button {
   opacity: 0;
 }
 
-.screen-subtitle.is-active .subtitle-line-first {
-  animation: subtitle-fadein 1.2s var(--ease-ui) 180ms forwards;
+.screen-subtitle.is-active .subtitle-line {
+  animation: subtitle-fadein 1.2s var(--ease-ui) var(--subtitle-delay, 180ms) forwards;
 }
 
-.screen-subtitle.is-active .subtitle-line-second {
-  animation: subtitle-fadein 1.2s var(--ease-ui) 1s forwards;
+.screen-map {
+  z-index: 3;
+  overflow: hidden;
+  background: #060c1a;
+}
+
+.map-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.screen-map.is-active .map-background {
+  animation: map-background-in 300ms var(--ease-ui) forwards;
+}
+
+.map-background[hidden] {
+  display: none;
+}
+
+.map-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.screen-map.is-active .map-particles {
+  animation: map-background-in 300ms var(--ease-ui) forwards;
+}
+
+.map-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(164, 184, 214, 0.5);
+  pointer-events: none;
+  animation: particle-twinkle var(--duration) var(--ease-ui) infinite;
+  animation-delay: var(--delay);
+}
+
+.map-close {
+  top: var(--spacing-safe-y);
+  right: var(--spacing-safe-x);
+  width: var(--icon-func);
+  height: var(--icon-func);
+}
+
+.map-avatar-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.building-label {
+  position: absolute;
+  z-index: 2;
+  padding: 10px 48px;
+  pointer-events: none;
+  background: transparent;
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 8px));
+}
+
+.building-label::before,
+.building-label::after {
+  position: absolute;
+  content: "";
+  clip-path: polygon(8% 50%, 50% 0%, 92% 50%, 50% 100%);
+  pointer-events: none;
+}
+
+.building-label::before {
+  inset: -1px;
+  z-index: 0;
+  background: rgba(164,184,214,0.25);
+}
+
+.building-label::after {
+  inset: 0;
+  z-index: 1;
+  background: rgba(164, 184, 214, 0.1);
+}
+
+.screen-map.is-active .building-label {
+  animation: building-label-in 200ms ease-out forwards;
+  animation-delay: calc(300ms + var(--label-order) * 80ms);
+}
+
+.building-name {
+  position: relative;
+  z-index: 2;
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: 0.7;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+  white-space: nowrap;
+}
+
+.map-avatar-node {
+  position: absolute;
+  display: flex;
+  width: 220px;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: auto;
+  transform: scale(0);
+  transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen-map.is-active .map-avatar-node {
+  animation: avatar-pop-in 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: calc(1060ms + var(--avatar-order) * 120ms);
+}
+
+.avatar-image {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  background-color: rgba(60, 80, 110, 0.6);
+  background-image: radial-gradient(circle, #3a4a6a 0%, #1a2540 100%);
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+  transition: transform 200ms var(--ease-ui);
+}
+
+.avatar-ring {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 132px;
+  height: 132px;
+  pointer-events: none;
+  border: 1.5px solid rgba(212, 184, 134, 0.7);
+  border-radius: 50%;
+  box-shadow:
+    0 0 15px rgba(164, 184, 214, 0.25),
+    inset 0 0 8px rgba(164, 184, 214, 0.1);
+  transform: translateX(-50%);
+  animation: ring-breathe 3s ease-in-out infinite;
+}
+
+.avatar-diamond {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(212, 184, 134, 0.8);
+  pointer-events: none;
+  transform: rotate(45deg);
+}
+
+.avatar-diamond.top {
+  top: -10px;
+  left: 50%;
+  margin-left: -4px;
+}
+
+.avatar-diamond.bottom {
+  top: 122px;
+  left: 50%;
+  margin-left: -4px;
+}
+
+.avatar-diamond.left {
+  top: 60px;
+  left: calc(50% - 70px);
+  margin-top: -4px;
+}
+
+.avatar-diamond.right {
+  top: 60px;
+  right: calc(50% - 70px);
+  margin-top: -4px;
+}
+
+.avatar-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.avatar-name {
+  color: var(--color-white);
+  font-family: var(--font-serif);
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+}
+
+.avatar-heart {
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+}
+
+.avatar-affinity {
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.2;
+  opacity: 0.8;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+}
+
+.map-avatar-node.selected .avatar-ring {
+  border-color: rgba(212, 184, 134, 1);
+  box-shadow: 0 0 35px rgba(212, 184, 134, 0.5);
+  animation: none;
+}
+
+.map-avatar-node.selected .avatar-image {
+  transform: scale(1.08);
+}
+
+.screen-map.is-closing {
+  opacity: 0;
+  transition: opacity var(--transition-screen);
 }
